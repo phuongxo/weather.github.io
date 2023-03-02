@@ -177,6 +177,9 @@ function covertTimeTo12HourFormat(time) {
     hour = hour ? hour : 12; // the hour '0' should be '12'
     hour = hour < 10 ? "0" + hour : hour;
     minute = minute < 10 ? "0" + minute : minute;
+    if (minute.length == 3) {
+        minute = minute.slice(1, 4);
+    }
     let strTime = hour + ":" + minute + " " + ampm;
     return strTime;
 }
