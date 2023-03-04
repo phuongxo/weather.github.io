@@ -1,10 +1,15 @@
+let cityBaseEndpoint = "https://api.teleport.org/api/cities/?search=";
+
 var currentFocus;
+let CITIES = [];
+
+SEARCH.addEventListener("click", function (e) {
+    CITIES = [];
+})
+
 SEARCH.addEventListener("input", function (e) {
     removeSuggestions();
-    var a,
-        b,
-        i,
-        val = this.value;
+    var a, b, i, val = this.value;
     if (!val) {
         return false;
     }
@@ -14,58 +19,57 @@ SEARCH.addEventListener("input", function (e) {
     a.setAttribute("id", "suggestions");
 
     this.parentNode.appendChild(a);
+    
+    let endpoint = cityBaseEndpoint + SEARCH.value;
+    fetch(endpoint)
+    .then((response) => response.json())
+    .then((result) => {
+        let cities = result._embedded["city:search-results"];
+        let length = cities.length > 5 ? 5 : cities.length;
 
+        for (let i = 0; i < length; i++) {
+            let isPush = true;
+            for (j = 0; j < CITIES.length; j++) {
+                if (CITIES[j].name == cities[i].matching_full_name) {
+                    isPush = false;
+                }
+            }
+            isPush ? CITIES.push({name: cities[i].matching_full_name}) : null
+        }
+    })
+    
     for (i = 0; i < CITIES.length; i++) {
-        /*check if the item starts with the same letters as the text field value:*/
-        if (
-            CITIES[i].name.substr(0, val.length).toUpperCase() ==
-            val.toUpperCase()
-        ) {
-            /*create a li element for each matching element:*/
-            b = document.createElement("li");
-            /*make the matching letters bold:*/
-            b.innerHTML =
-                "<strong>" + CITIES[i].name.substr(0, val.length) + "</strong>";
-            b.innerHTML += CITIES[i].name.substr(val.length);
-            /*insert a input field that will hold the current array item's value:*/
-            b.innerHTML +=
-                "<input type='hidden' value='" + CITIES[i].name + "'>";
-            /*execute a function when someone clicks on the item value (DIV element):*/
-            b.addEventListener("click", function (e) {
-                /*insert the value for the autocomplete text field:*/
+        if (CITIES[i].name.toUpperCase().includes(val.toUpperCase())) {
+            document.getElementById("suggestions").classList.add("nav");
+            document.getElementById("suggestions").classList.add("flex-column");
+            li = document.createElement("li");
+            li.innerHTML = CITIES[i].name.substr(0, val.length);
+            li.innerHTML += CITIES[i].name.substr(val.length);
+            li.innerHTML +=  "<input type='hidden' value='" + CITIES[i].name + "'>";
+            li.addEventListener("click", function (e) {
                 SEARCH.value = this.getElementsByTagName("input")[0].value;
                 removeSuggestions();
+                CITIES = [];
             });
 
-            a.appendChild(b);
+            a.appendChild(li);
         }
     }
 });
 
-/*execute a function presses a key on the keyboard:*/
 SEARCH.addEventListener("keydown", function (e) {
     var x = document.getElementById("suggestions");
     if (x) x = x.getElementsByTagName("li");
     if (e.keyCode == 40) {
-        /*If the arrow DOWN key
-      is pressed,
-      increase the currentFocus variable:*/
         currentFocus++;
-        /*and and make the current item more visible:*/
         addActive(x);
     } else if (e.keyCode == 38) {
-        /*If the arrow UP key
-      is pressed,
-      decrease the currentFocus variable:*/
         currentFocus--;
-        /*and and make the current item more visible:*/
         addActive(x);
     }
     if (e.keyCode == 13) {
-        /*If the ENTER key is pressed, prevent the form from being submitted,*/
         e.preventDefault();
         if (currentFocus > -1) {
-            /*and simulate a click on the "active" item:*/
             if (x) x[currentFocus].click();
         }
     }
@@ -94,18 +98,14 @@ SEARCH_FORM.addEventListener("submit", (e) => {
 });
 
 function addActive(x) {
-    /*a function to classify an item as "active":*/
     if (!x) return false;
-    /*start by removing the "active" class on all items:*/
     removeActive(x);
     if (currentFocus >= x.length) currentFocus = 0;
     if (currentFocus < 0) currentFocus = x.length - 1;
-    /*add class "autocomplete-active":*/
     x[currentFocus].classList.add("active");
 }
 
 function removeActive(x) {
-    /*a function to remove the "active" class from all autocomplete items:*/
     for (var i = 0; i < x.length; i++) {
         x[i].classList.remove("active");
     }

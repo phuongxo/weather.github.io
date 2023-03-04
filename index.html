@@ -1,127 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        />
-        <link rel="stylesheet" href="style.css" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    </head>
 
-    <body>
-        <div class="wrapper">
-            <div class="sidebar">
-                <div>
-                    <form class="search" id="search">
-                        <input type="text" id="query" placeholder="Search..." />
-                        <button>
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                        </button>
-                    </form>
-                    <div class="weather-icon">
-                        <img id="icon" src="static/img/26.png" alt="" />
-                    </div>
-                    <div class="temperature">
-                        <h1 id="temp">0</h1>
-                        <span class="temp-unit">°C</span>
-                    </div>
-                    <div class="date-time">
-                        <p id="date-time">Monday, 12:00</p>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="condition-rain">
-                        <div class="condition">
-                            <i class="fa fa-cloud" aria-hidden="true"></i>
-                            <p id="condition">condition</p>
-                        </div>
-                        <div class="rain">
-                            <i class="fa fa-tint" aria-hidden="true"></i>
-                            <p id="rain">perc - 0%</p>
-                        </div>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+        integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</head>
 
-						<div class="img-location">
-							<div class="location-text">
-								<p id="location">location</p>
-							</div>
-						</div>
+<body>
+    <div class="">
+        <div class="wrap row container-fluid">
+            <div class="sidebar col-sm-12 col-xs-12 col-lg-3 sidenav hidden-xs-sm-13 p-4">
+                <form class="tim-kiem" id="tim-kiem">
+                    <input type="text" id="query" placeholder="Search..." />
+                    <button>
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                    <datalist id="suggestions" class="nav flex-column">
+                        <option value="Hanoi"></option>
+                        <option value="New York"></option>
+                        <option value="London"></option>
+                    </datalist>
+                </form>
+                <div class="thoi-tiet-icon container-fluid">
+                    <div class="container-fluid text-center">
+                        <img id="icon" src="static/img/26.png" style="width: 60%;" alt="" class="img-fluid" />
                     </div>
                 </div>
-                
+
+                <div class="d-flex flex-column text-center">
+                    <h6 class="display-4 mb-0 font-weight-bold" style="color: #1c2331">
+                        <span id="temp"></span><span class="thoi-tiet-unit">°C</span>
+                    </h6>
+                    <span id="thoi-gian" class="small" style="color: #868b94">Time</span>
+                    <span class="small" style="color: #868b94">
+                        <span id="tinh-trang" style="margin-right: 5px;">condition</span>
+                        |
+                        <span id="mua" style="margin-left: 5px;">perc - 1%</span>
+                    </span>
+                </div>
+
+                <div class="col-md-12 col-xs-12 mt-3">
+                    <div class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div id="thoi-tiet-theo-gio" class="d-flex justify-content-around text-center pt-2">
+                                    <!-- code cho thoi tiet theo gio ben sidebar -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xs-12 img-location h-200 rounded-4 mt-4 d-flex flex-column text-center">
+                    <div class="location-text text-light text-white fw-bold fs-5" id="location">
+                        location
+                    </div>
+                </div>
             </div>
-            <div class="main">
-                <nav>
-                    <ul class="options today-week">
-                        <button class="hourly">today</button>
-                        <button class="week active">week</button>
-                    </ul>
-                    <ul class="options units c-f">
-                        <button class="celcius active">°C</button>
-                        <button class="fahrenheit">°F</button>
-                    </ul>
-                </nav>
-                <div class="cards" id="weather-cards"></div>
-                <div class="highlights">
-                    <h2 class="heading">today's highlights</h2>
-                    <div class="cards">
-                        <div class="card2">
-                            <h4 class="card-heading">UV Index</h4>
-                            <div class="content">
-                                <p class="uv-index">0</p>
-                                <p class="uv-text">Low</p>
+            <div class="main col-sm-12 col-xs-12 col-lg-9 sidenav hidden-xs-sm-13 p-4">
+                <div class="container-fluid">
+                    <nav class="navbar navbar-expand-lg" style="padding-bottom: 0px;">
+                        <div class="col-sm-9 col-xs-10 col-md-10">
+                            <ul class="lua-chon" style="padding-left: 0px;">
+                                <button class="nav-item hourly" style="margin-right: 20px;">today</li>
+                                    <button class="nav-item week active" style="text-align: left;">Forecast 4-Day Outlook</li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-3 col-xs-2 col-md-2">
+                            <ul class="lua-chon units c-f" style="padding-left: 0px;">
+                                <button class="nav-item celcius active" style="margin-right: 20px;">°C</button>
+                                <button class="nav-item fahrenheit">°F</button>
+                            </ul>
+                        </div>
+                    </nav>
+
+                    <div class="row" id="the-thoi-tiet">
+                       
+                    </div>
+
+                    <div style="padding-bottom: 0px;">
+                        <div class="noi-bat">
+                            <p class="heading">today's highlights</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-4 mb-4">
+                            <div class="card" style="color: #4B515D; border-radius: 20px; border: none;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex text-center">
+                                        <h6 class="flex-grow-1">UV Index</h6>
+                                    </div>
+                
+                                    <div class="d-flex flex-column text-center mt-1 mb-1">
+                                        <h6 class="display-7 mb-0 font-weight-bold uv-index" style="color: #1C2331;">0</h6>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card2">
-                            <h4 class="card-heading">Wind Status</h4>
-                            <div class="content">
-                                <p class="wind-speed">0</p>
-                                <p>km/h</p>
+                        <div class="col-xs-12 col-sm-12 col-md-4 mb-4">
+                            <div class="card" style="color: #4B515D; border-radius: 20px; border: none;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex text-center">
+                                        <h6 class="flex-grow-1">Wind Status</h6>
+                                    </div>
+                
+                                    <div class="d-flex flex-column text-center mt-1 mb-1">
+                                        <h6 class="display-7 mb-0 font-weight-bold toc-do-gio" style="color: #1C2331;"> 0 km/h</h6>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card2">
-                            <h4 class="card-heading">Sunrise & Sunset</h4>
-                            <div class="content">
-                                <p class="sun-rise">0</p>
-                                <p class="sun-set">0</p>
+                        <div class="col-xs-12 col-sm-12 col-md-4 mb-4">
+                            <div class="card" style="color: #4B515D; border-radius: 20px; border: none;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex text-center">
+                                        <h6 class="flex-grow-1">Sunrise & Sunset</h6>
+                                    </div>
+                
+                                    <div class="d-flex flex-column text-center mt-1 mb-1">
+                                        <h6 class="display-7 mb-0 font-weight-bold " style="color: #1C2331;"> 
+                                            <span class="mat-troi-moc"></span> &     <span class="mat-troi-lan"></span>
+                                        </h6>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card2">
-                            <h4 class="card-heading">Humidity</h4>
-                            <div class="content">
-                                <p class="humidity">0</p>
-                                <p class="humidity-status">Normal</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-4 mb-4">
+                            <div class="card" style="color: #4B515D; border-radius: 20px; border: none;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex text-center">
+                                        <h6 class="flex-grow-1">Pressure</h6>
+                                    </div>
+                
+                                    <div class="d-flex flex-column text-center mt-1 mb-1">
+                                        <h6 class="display-7 mb-0 font-weight-bold pressure" style="color: #1C2331;">0</h6>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card2">
-                            <h4 class="card-heading">Visibility</h4>
-                            <div class="content">
-                                <p class="visibilty">0</p>
-                                <p class="visibilty-status">Normal</p>
+                        <div class="col-xs-12 col-sm-12 col-md-4 mb-4">
+                            <div class="card" style="color: #4B515D; border-radius: 20px; border: none;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex text-center">
+                                        <h6 class="flex-grow-1">Dew</h6>
+                                    </div>
+                
+                                    <div class="d-flex flex-column text-center mt-1 mb-1">
+                                        <h6 class="display-7 mb-0 font-weight-bold dew" style="color: #1C2331;"> 0 km/h</h6>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card2">
-                            <h4 class="card-heading">Air Quality</h4>
-                            <div class="content">
-                                <p class="air-quality">0</p>
-                                <p class="air-quality-status">Normal</p>
+                        <div class="col-xs-12 col-sm-12 col-md-4 mb-4">
+                            <div class="card" style="color: #4B515D; border-radius: 20px; border: none;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex text-center">
+                                        <h6 class="flex-grow-1">Solarradiation</h6>
+                                    </div>
+                
+                                    <div class="d-flex flex-column text-center mt-1 mb-1">
+                                        <h6 class="display-7 mb-0 font-weight-bold solarradiation" style="color: #1C2331;"></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-4 mb-4">
+                            <div class="card" style="color: #4B515D; border-radius: 20px; border: none;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex text-center">
+                                        <h6 class="flex-grow-1">Humidity</h6>
+                                    </div>
+                
+                                    <div class="d-flex flex-column text-center mt-1 mb-1">
+                                        <h6 class="display-7 mb-0 font-weight-bold do-am" style="color: #1C2331;"> 0 </h6>
+                                        <span class="small do-am-status" style="color: #868B94">123213</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-4 mb-4">
+                            <div class="card" style="color: #4B515D; border-radius: 20px; border: none;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex text-center">
+                                        <h6 class="flex-grow-1">Visibility</h6>
+                                    </div>
+                
+                                    <div class="d-flex flex-column text-center mt-1 mb-1">
+                                        <h6 class="display-7 mb-0 font-weight-bold tam-nhin" style="color: #1C2331;"> 0 </h6>
+                                        <span class="small trang-thai-tam-nhin" style="color: #868B94">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-4 mb-4">
+                            <div class="card" style="color: #4B515D; border-radius: 20px; border: none;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex text-center">
+                                        <h6 class="flex-grow-1">Air Quality</h6>
+                                    </div>
+                                    <div class="d-flex flex-column text-center mt-1 mb-1">
+                                        <h6 class="display-7 mb-0 font-weight-bold luong-mua" style="color: #1C2331;"> 0 </h6>
+                                        <span class="small luong-mua-status" style="color: #868B94">123213</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p class="credits">
-					Crafted with ❤️ by
-					<a href="#">Phượng xồ</a>
-				</p>
+                <div class="row col-md-12 text-center small ">
+                    <span>Crafted with ❤️ by <a href="#">Team 8</a></span>
+                </div>
             </div>
         </div>
 
-        <script src="static/js/constants.js" defer></script>
-        <script src="static/js/date_time.js" defer></script>
-        <script src="static/js/script.js" defer></script>
-        <script src="static/js/search.js" defer></script>
-    </body>
+      
+    </div>
+
+
+
+    <script src="static/js/constants.js" defer></script>
+    <script src="static/js/date_time.js" defer></script>
+    <script src="static/js/script.js" defer></script>
+    <script src="static/js/search.js" defer></script>
+</body>
+
 </html>
