@@ -120,21 +120,9 @@ img {
 .the2 {
     margin-right: 20px;
     margin-bottom: 20px;
-    text-align: center;
+    text-align: cZ;
 }
 
-.the2 .card2 {
-    /* width: 100px; */
-    /* height: 130px; */
-    /* border-radius: 20px; */
-    /* color: #1a1a1a; */
-    /* background-color: #fff; */
-    /* text-align: center; */
-    /* padding: 10px 0; */
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* justify-content: space-between; */
-}
 .the2 .card2 h2 {
     font-size: 15px;
     font-weight: 600;
@@ -142,6 +130,12 @@ img {
 .the2 .card2 .card-icon {
     width: 50%;
     margin: 0 auto;
+}
+.the2 .card2 .day-temp {
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    display: flex;
 }
 .noi-bat .heading {
     font-size: 16px;
@@ -151,6 +145,7 @@ img {
 }
 .the2 {
     width: 250px;
+    height: 150px;
     border-radius: 20px;
     color: #1a1a1a;
     background-color: #fff;
@@ -188,4 +183,12 @@ img {
 }
 .img-location .location-text{
     margin: auto;
+}
+
+@media screen and (max-width: 600px) {
+    .img-mobile {
+        width: 56px!important; 
+        height: 57px;
+        padding-top: 13px;
+    }
 }

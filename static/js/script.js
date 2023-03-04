@@ -162,7 +162,7 @@ function updateForecast(data, unit, type) {
                                     <span> ${data[day].uvindex}h </span>
                                 </div>
                             </div>
-                            <div class="small" style="width: 70px; height: 57px">
+                            <div class="small img-mobile" style="width: 70px; height: 57px">
                                 <img src="${iconSrc}">
                             </div>
                         </div>
