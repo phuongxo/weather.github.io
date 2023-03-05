@@ -4,14 +4,16 @@ let hourlyOrWeek = "week";
 
 // hàm này tự động lấy dữ liệu thời tiết của HÀ Nội, load trang lần đầu tiên sẽ gọi hàm này
 function initFetchDataDefault() {
-    getWeatherData("Ho Chi Minh City", "c", hourlyOrWeek);
+    currentCity = "Ho Chi Minh City";
+    currentUnit = "c";
+    getWeatherData(currentCity, currentUnit, hourlyOrWeek);
 }
 initFetchDataDefault();
 
 // function to get weather data
 function getWeatherData(city, unit, hourlyOrWeek) {
-    let cityA = city.split(",");
-    city = cityA[0];
+    let citySplit = city.split(",");
+    city = citySplit[0];
     
     fetch(
         `${API_URL}/${city}?unitGroup=metric&key=${API_KEY}&contentType=json`,
@@ -20,38 +22,36 @@ function getWeatherData(city, unit, hourlyOrWeek) {
         .then((response) => response.json())
         .then((data) => {
             let today = data.currentConditions;
-            if (unit === "c") {
-                TEMP.innerText = today.temp;
-            } else {
-                TEMP.innerText = CToF(today.temp);
-            }
+            
+            unit === "c" ? TEMP.innerText = today.temp : TEMP.innerText = CToF(today.temp);
+            
             CURRENT_LOCATION.innerText = data.resolvedAddress;
             CONDITION.innerText = today.conditions;
             RAIN.innerText = "Perc - " + today.precip + "%";
             UV_INDEX.innerText = today.uvindex;
             WIND_SPEED.innerText = today.windspeed + " km/h";
-            // measureUvIndex(today.uvindex);
             MAIN_ICON.src = getIcon(today.icon);
-            changeBackground(today.icon);
-            changeLocationBackground(city);
             HUMIDITY.innerText = today.humidity + "%";
-            updateHumidityStatus(today.humidity);
             VISIBILITY.innerText = today.visibility;
-            updateVisibilityStatus(today.visibility);
             AIR_QUALITY.innerText = today.winddir;
-            updateAirQualityStatus(today.winddir);
-            if (hourlyOrWeek === "hourly") {
-                updateForecast(data.days[0].hours, unit, "day");
-            } else {
-                updateForecast(data.days, unit, "week");
-            }
-            fetchForecastHoursSidebar(data.days, unit, "day")
-
             SUN_RISE.innerText = timeFormat(today.sunrise);
             SUN_SET.innerText = timeFormat(today.sunset);
             PRESSURE.innerText = today.pressure;
             DEW.innerText = today.dew;
             SOLARRADIATION.innerText = today.solarradiation;
+
+            updateAirQualityStatus(today.winddir);
+            changeBackground(today.icon);
+            changeLocationBackground(city);
+            updateHumidityStatus(today.humidity);
+            updateVisibilityStatus(today.visibility);
+            fetchForecastHoursSidebar(data.days, unit)
+
+            if (hourlyOrWeek === "hourly") {
+                updateForecast(data.days[0].hours, unit, "day");
+            } else {
+                updateForecast(data.days, unit, "week");
+            }
         })
         .catch((err) => {
             alert("City not found in our database");
@@ -59,25 +59,30 @@ function getWeatherData(city, unit, hourlyOrWeek) {
 }
 
 
-function fetchForecastHoursSidebar(data, unit, type) {
+function fetchForecastHoursSidebar(data, unit) {
     HOURS_SIDEBAR_CARDS.innerHTML = "";
+    
     let day = 0;
     let numCards = 4;
+    
     let nextTime = new Date().getHours() ;
     nextTime += 5;
+    
     for (let i = 0; i < numCards; i++) {
         if (nextTime >= 23) {
             day += 1;
             nextTime = 0;
         }
+
         let dayName = getHour(data[day].hours[nextTime].datetime);
         let iconCondition = data[day].hours[nextTime].icon;
         let iconSrc = getIcon(iconCondition);
 
         let dayTemp = data[day].hours[nextTime].temp;
         if (unit === "f") {
-            dayTemp = CToF(data[day].hours[nextTime].temp);
+            dayTemp = CToF(dayTemp);
         }
+
         let tempUnit = "°C";
         if (unit === "f") {
             tempUnit = "°F";
@@ -101,6 +106,7 @@ function fetchForecastHoursSidebar(data, unit, type) {
 //hàm xử lý dự báo thời tiết 7 ngày
 function updateForecast(data, unit, type) {
     WEATHER_CARDS.innerHTML = "";
+    
     let day = 0;
     let numCards = 0;
     if (type === "day") {
@@ -120,14 +126,14 @@ function updateForecast(data, unit, type) {
 
         let dayTemp = data[day].temp;
         if (unit === "f") {
-            dayTemp = CToF(data[day].temp);
+            dayTemp = CToF(dayTemp);
         }
         let tempUnit = "°C";
         if (unit === "f") {
             tempUnit = "°F";
         }
 
-        if (numCards == 4) {
+        if (type === "week") {
             let div1 = document.createElement("div");
             div1.classList.add("col-xs-12");
             div1.classList.add("col-sm-12");
@@ -179,7 +185,7 @@ function updateForecast(data, unit, type) {
 
             card.innerHTML = `
                 <div class="card2 card-mobile">
-                    <h2 class="day-name mt-1">${dayName}</h2>
+                    <h2 class="day-name mt-1 text-center">${dayName}</h2>
                     <div class="card-icon">
                     <img src="${iconSrc}" class="day-icon" alt="" />
                     </div>
@@ -198,40 +204,13 @@ function updateForecast(data, unit, type) {
 
 // thay đổi icon theo tình trạng
 function getIcon(condition) {
-    switch (condition) {
-        case "partly-cloudy-day":
-            return "static/img/27.png";
-        case "partly-cloudy-night":
-            return "static/img/15.png";
-        case "rain":
-            return "static/img/39.png";
-        case "clear-day":
-            return "static/img/26.png";
-        case "clear-night":
-            return "static/img/10.png";
-        default:
-            return "static/img/26.png";
-    }
+    return ICONS[condition];
 }
 
 // thay doi hinh nen theo thoi tiet
 function changeBackground(condition) {
     const body = document.querySelector("body");
-    let bg = "";
-    switch (condition) {
-        case "partly-cloudy-day":
-            bg = "static/img/pc.webp";
-        case "partly-cloudy-night":
-            bg = "static/img/pcn.jpeg";
-        case "rain":
-            bg = "static/img/rain.webp";
-        case "clear-day":
-            bg = "static/img/cd.jpeg";
-        case "clear-night":
-            bg = "static/img/cn.jpeg";
-        default:
-            bg = "static/img/pc.webp";
-    }
+    let bg = BACKGROUND_IMAGES[condition];
     body.style.backgroundImage = `linear-gradient(rgb(97 97 97 / 50%), rgb(98 97 97 / 50%)),url(${bg})`;
 }
 
@@ -256,8 +235,9 @@ function changeLocationBackground(city) {
 
 // xử lý giờ, hours from hh:mm:ss
 function getHour(time) {
-    let hour = time.split(":")[0];
-    let min = time.split(":")[1];
+    let timeSplit = time.split(":");
+    let hour = timeSplit[0];
+    let min = timeSplit[1];
     if (hour > 12) {
         hour = hour - 12;
         return `${hour}:${min} PM`;
@@ -267,8 +247,9 @@ function getHour(time) {
 }
 
 function timeFormat(time) {
-    let hour = time.split(":")[0];
-    let minute = time.split(":")[1];
+    let timeSplit = time.split(":");
+    let hour = timeSplit[0];
+    let minute = timeSplit[1];
     return hour + ":" + minute;
 }
 
@@ -278,34 +259,17 @@ function getDayName(date) {
     return DAYS[day.getDay()];
 }
 
-// Hàm lấy xử lý tia UV
-// function measureUvIndex(uvIndex) {
-//     switch (true) {
-//         case uvIndex <= 2:
-//             UV_TEXT.innerText = "Low";
-//             break;
-//         case uvIndex <= 5:
-//             UV_TEXT.innerText = "Moderate";
-//             break;
-//         case uvIndex <= 7:
-//             UV_TEXT.innerText = "High";
-//             break;
-//         case uvIndex <= 10:
-//             UV_TEXT.innerText = "Very High";
-//             break;
-//         default:
-//             UV_TEXT.innerText = "Extreme";
-//     }
-// }
-
 // hàm xử lý trạng thái của độ ẩm
 function updateHumidityStatus(humidity) {
-    if (humidity <= 30) {
-        HUMIDITY_STATUS.innerText = "Low";
-    } else if (humidity <= 60) {
-        HUMIDITY_STATUS.innerText = "Moderate";
-    } else {
-        HUMIDITY_STATUS.innerText = "High";
+    switch (true) {
+        case humidity <= 30:
+            HUMIDITY_STATUS.innerText = "Low";
+            break;
+        case humidity <= 60:
+            HUMIDITY_STATUS.innerText = "Moderate";
+            break
+        default:
+            HUMIDITY_STATUS.innerText = "High";
     }
 }
 
@@ -382,11 +346,11 @@ function changeUnit(unit) {
             elem.innerText = `°${unit.toUpperCase()}`;
         });
         if (unit === "c") {
-            C_BTN.classList.add("active");
             F_BTN.classList.remove("active");
+            C_BTN.classList.add("active");
         } else {
-            C_BTN.classList.remove("active");
             F_BTN.classList.add("active");
+            C_BTN.classList.remove("active");
         }
         if (currentCity === "") {
             currentCity = "Ho Chi Minh City";
@@ -408,11 +372,11 @@ function changeTimeSpan(unit) {
     if (hourlyOrWeek !== unit) {
         hourlyOrWeek = unit;
         if (unit === "hourly") {
-            HOURLY_BTN.classList.add("active");
             WEEK_BTN.classList.remove("active");
+            HOURLY_BTN.classList.add("active");
         } else {
-            HOURLY_BTN.classList.remove("active");
             WEEK_BTN.classList.add("active");
+            HOURLY_BTN.classList.remove("active");
         }
         if (currentCity === "") {
             currentCity = "Ho Chi Minh City";

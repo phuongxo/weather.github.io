@@ -1,7 +1,6 @@
 const API_KEY = "M7UFFW2RSUWH7WZSJ8N5NZW62";
-const API_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
-const API_PEXELS = "b4y7EqrsTBlLB20UM0x1hcHrVDDJ6YsTc5iaNqXtDkYQEWLEWbJdnLdC"
-
+const API_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline";
+const API_PEXELS = "b4y7EqrsTBlLB20UM0x1hcHrVDDJ6YsTc5iaNqXtDkYQEWLEWbJdnLdC";
 
 const TEMP = document.getElementById("temp"),
     DATE = document.getElementById("thoi-gian"),
@@ -43,3 +42,20 @@ const DAYS = [
     "Saturday",
 ];
 
+const ICONS = {
+    "partly-cloudy-day": "static/img/27.png",
+    "partly-cloudy-night": "static/img/15.png",
+    rain: "static/img/39.png",
+    "clear-day": "static/img/26.png",
+    "clear-night": "static/img/10.png",
+    cloudy: "static/img/27.png",
+};
+
+const BACKGROUND_IMAGES = {
+    "partly-cloudy-day": "static/img/pc.webp",
+    "partly-cloudy-night": "static/img/pcn.jpeg",
+    rain: "static/img/rain.webp",
+    "clear-day": "static/img/cd.jpeg",
+    "clear-night": "static/img/cn.jpeg",
+    cloudy: "static/img/pc.png",
+};
