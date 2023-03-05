@@ -130,6 +130,7 @@ img {
 .the2 .card2 .card-icon {
     width: 50%;
     margin: 0 auto;
+    margin-bottom: 1rem;
 }
 .the2 .card2 .day-temp {
     font-size: 12px;
@@ -190,5 +191,42 @@ img {
         width: 56px!important; 
         height: 57px;
         padding-top: 13px;
+    }
+    .card-icon{
+        margin-bottom: 3px!important;
+    }
+    .card-icon img{
+        width: 85%;
+    }
+    .the2 .card2 h2 {
+        text-align: center;
+    }
+    .main nav .lua-chon button{
+        font-size: 13px;
+    }
+    .main nav .c-f button{
+        width: 30px;
+        height: 30px;
+        margin-right: 0px!important;
+    }
+    .lua-chon{
+        margin-bottom: 7px;
+    }
+    h6.flex-grow-1 {
+        margin-bottom: 0px;
+    }
+    .col-md-12.col-xs-12.mt-3{
+        margin-top: 0px!important;
+    }
+    .wrap.row.container-fluid .sidebar  {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+    .wrap.row.container-fluid .main  {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+    div#location {
+        font-size: 15px!important;
     }
 }

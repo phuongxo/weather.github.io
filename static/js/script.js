@@ -19,8 +19,6 @@ function getWeatherData(city, unit, hourlyOrWeek) {
     )
         .then((response) => response.json())
         .then((data) => {
-    console.log(data);
-
             let today = data.currentConditions;
             if (unit === "c") {
                 TEMP.innerText = today.temp;
@@ -48,9 +46,9 @@ function getWeatherData(city, unit, hourlyOrWeek) {
                 updateForecast(data.days, unit, "week");
             }
             fetchForecastHoursSidebar(data.days, unit, "day")
-            SUN_RISE.innerText = covertTimeTo12HourFormat(today.sunrise);
-            SUN_SET.innerText = covertTimeTo12HourFormat(today.sunset);
-            console.log(today);
+
+            SUN_RISE.innerText = timeFormat(today.sunrise);
+            SUN_SET.innerText = timeFormat(today.sunset);
             PRESSURE.innerText = today.pressure;
             DEW.innerText = today.dew;
             SOLARRADIATION.innerText = today.solarradiation;
@@ -182,7 +180,7 @@ function updateForecast(data, unit, type) {
             card.innerHTML = `
                 <div class="card2 card-mobile">
                     <h2 class="day-name mt-1">${dayName}</h2>
-                    <div class="card-icon  mb-3">
+                    <div class="card-icon">
                     <img src="${iconSrc}" class="day-icon" alt="" />
                     </div>
                     <div class="day-temp">
@@ -268,20 +266,10 @@ function getHour(time) {
     }
 }
 
-// xử lý thời gian, convert time to 12 hour format
-function covertTimeTo12HourFormat(time) {
+function timeFormat(time) {
     let hour = time.split(":")[0];
     let minute = time.split(":")[1];
-    let ampm = hour >= 12 ? "pm" : "am";
-    hour = hour % 12;
-    hour = hour ? hour : 12; // the hour '0' should be '12'
-    hour = hour < 10 ? "0" + hour : hour;
-    minute = minute < 10 ? "0" + minute : minute;
-    if (minute.length == 3) {
-        minute = minute.slice(1, 4);
-    }
-    let strTime = hour + ":" + minute + " " + ampm;
-    return strTime;
+    return hour + ":" + minute;
 }
 
 // lấy tên của ngày (moday, tuesday, ...)
