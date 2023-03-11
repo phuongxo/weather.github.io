@@ -45,17 +45,17 @@ const DAYS = [
 const ICONS = {
     "partly-cloudy-day": "static/img/27.png",
     "partly-cloudy-night": "static/img/15.png",
-    rain: "static/img/39.png",
+    "rain": "static/img/39.png",
     "clear-day": "static/img/26.png",
     "clear-night": "static/img/10.png",
-    cloudy: "static/img/27.png",
+    "cloudy": "static/img/27.png",
 };
 
 const BACKGROUND_IMAGES = {
     "partly-cloudy-day": "static/img/pc.webp",
     "partly-cloudy-night": "static/img/pcn.jpeg",
-    rain: "static/img/rain.webp",
+    "rain": "static/img/rain.webp",
     "clear-day": "static/img/cd.jpeg",
     "clear-night": "static/img/cn.jpeg",
-    cloudy: "static/img/pc.png",
+    "cloudy": "static/img/pc.png",
 };
